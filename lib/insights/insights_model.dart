@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'rough_widget.dart' show RoughWidget;
+import 'insights_widget.dart' show InsightsWidget;
 import 'package:flutter/material.dart';
 
-class RoughModel extends FlutterFlowModel<RoughWidget> {
+class InsightsModel extends FlutterFlowModel<InsightsWidget> {
   @override
   void initState(BuildContext context) {}
 

@@ -221,7 +221,7 @@ class _AddSubTaskSheetWidgetState extends State<AddSubTaskSheetWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 30.0),
                 child: FFButtonWidget(
                   onPressed: (_model.textController1.text == '')
                       ? null

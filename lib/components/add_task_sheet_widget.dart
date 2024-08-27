@@ -346,6 +346,13 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                                                     ),
                                               ),
                                             ),
+                                            Icon(
+                                              Icons.delete_rounded,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
+                                              size: 18.0,
+                                            ),
                                           ].divide(const SizedBox(width: 10.0)),
                                         ),
                                       ),
@@ -437,7 +444,7 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 30.0),
                 child: FFButtonWidget(
                   onPressed: ((_model.textController1.text == '') ||
                           (FFAppState().subtasks.isEmpty))

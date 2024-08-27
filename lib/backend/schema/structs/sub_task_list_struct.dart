@@ -11,10 +11,12 @@ class SubTaskListStruct extends BaseStruct {
     String? subTaskDescription,
     bool? status,
     int? timeOfCompletion,
+    int? timeOfBreak,
   })  : _subTaskName = subTaskName,
         _subTaskDescription = subTaskDescription,
         _status = status,
-        _timeOfCompletion = timeOfCompletion;
+        _timeOfCompletion = timeOfCompletion,
+        _timeOfBreak = timeOfBreak;
 
   // "subTaskName" field.
   String? _subTaskName;
@@ -47,12 +49,22 @@ class SubTaskListStruct extends BaseStruct {
 
   bool hasTimeOfCompletion() => _timeOfCompletion != null;
 
+  // "timeOfBreak" field.
+  int? _timeOfBreak;
+  int get timeOfBreak => _timeOfBreak ?? 0;
+  set timeOfBreak(int? val) => _timeOfBreak = val;
+
+  void incrementTimeOfBreak(int amount) => timeOfBreak = timeOfBreak + amount;
+
+  bool hasTimeOfBreak() => _timeOfBreak != null;
+
   static SubTaskListStruct fromMap(Map<String, dynamic> data) =>
       SubTaskListStruct(
         subTaskName: data['subTaskName'] as String?,
         subTaskDescription: data['subTaskDescription'] as String?,
         status: data['status'] as bool?,
         timeOfCompletion: castToType<int>(data['timeOfCompletion']),
+        timeOfBreak: castToType<int>(data['timeOfBreak']),
       );
 
   static SubTaskListStruct? maybeFromMap(dynamic data) => data is Map
@@ -64,6 +76,7 @@ class SubTaskListStruct extends BaseStruct {
         'subTaskDescription': _subTaskDescription,
         'status': _status,
         'timeOfCompletion': _timeOfCompletion,
+        'timeOfBreak': _timeOfBreak,
       }.withoutNulls;
 
   @override
@@ -82,6 +95,10 @@ class SubTaskListStruct extends BaseStruct {
         ),
         'timeOfCompletion': serializeParam(
           _timeOfCompletion,
+          ParamType.int,
+        ),
+        'timeOfBreak': serializeParam(
+          _timeOfBreak,
           ParamType.int,
         ),
       }.withoutNulls;
@@ -108,6 +125,11 @@ class SubTaskListStruct extends BaseStruct {
           ParamType.int,
           false,
         ),
+        timeOfBreak: deserializeParam(
+          data['timeOfBreak'],
+          ParamType.int,
+          false,
+        ),
       );
 
   @override
@@ -119,12 +141,13 @@ class SubTaskListStruct extends BaseStruct {
         subTaskName == other.subTaskName &&
         subTaskDescription == other.subTaskDescription &&
         status == other.status &&
-        timeOfCompletion == other.timeOfCompletion;
+        timeOfCompletion == other.timeOfCompletion &&
+        timeOfBreak == other.timeOfBreak;
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([subTaskName, subTaskDescription, status, timeOfCompletion]);
+  int get hashCode => const ListEquality().hash(
+      [subTaskName, subTaskDescription, status, timeOfCompletion, timeOfBreak]);
 }
 
 SubTaskListStruct createSubTaskListStruct({
@@ -132,10 +155,12 @@ SubTaskListStruct createSubTaskListStruct({
   String? subTaskDescription,
   bool? status,
   int? timeOfCompletion,
+  int? timeOfBreak,
 }) =>
     SubTaskListStruct(
       subTaskName: subTaskName,
       subTaskDescription: subTaskDescription,
       status: status,
       timeOfCompletion: timeOfCompletion,
+      timeOfBreak: timeOfBreak,
     );

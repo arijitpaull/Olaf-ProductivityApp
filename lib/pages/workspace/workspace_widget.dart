@@ -125,7 +125,34 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            actions: const [],
+            actions: [
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    context.pushNamed(
+                      'Insights',
+                      extra: <String, dynamic>{
+                        kTransitionInfoKey: const TransitionInfo(
+                          hasTransition: true,
+                          transitionType: PageTransitionType.fade,
+                          duration: Duration(milliseconds: 100),
+                        ),
+                      },
+                    );
+                  },
+                  child: const Icon(
+                    Icons.insights_rounded,
+                    color: Color(0x80F0F0F0),
+                    size: 25.0,
+                  ),
+                ),
+              ),
+            ],
             centerTitle: true,
             elevation: 0.0,
           ),
@@ -164,55 +191,140 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                         width: 2.0,
                                       ),
                                     ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                    child: Stack(
                                       children: [
-                                        Expanded(
-                                          child: Align(
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Align(
+                                                alignment: const AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: FlutterFlowTimer(
+                                                  initialTime: _model
+                                                      .workTimerInitialTimeMs,
+                                                  getDisplayTime: (value) =>
+                                                      StopWatchTimer
+                                                          .getDisplayTime(value,
+                                                              milliSecond:
+                                                                  false),
+                                                  controller: _model
+                                                      .workTimerController,
+                                                  updateStateInterval: const Duration(
+                                                      milliseconds: 1000),
+                                                  onChanged: (value,
+                                                      displayTime,
+                                                      shouldUpdate) {
+                                                    _model.workTimerMilliseconds =
+                                                        value;
+                                                    _model.workTimerValue =
+                                                        displayTime;
+                                                    if (shouldUpdate) {
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                                  onEnded: () async {
+                                                    _model.paused = true;
+                                                    setState(() {});
+                                                  },
+                                                  textAlign: TextAlign.start,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .headlineSmall
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .info,
+                                                        fontSize: 25.0,
+                                                        letterSpacing: 2.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        if ((_model.paused == true) &&
+                                            (_model.workTimerMilliseconds >
+                                                0) &&
+                                            (_model.breakTimerValue != ''))
+                                          Align(
                                             alignment:
-                                                const AlignmentDirectional(0.0, 0.0),
-                                            child: FlutterFlowTimer(
-                                              initialTime:
-                                                  _model.timerInitialTimeMs,
-                                              getDisplayTime: (value) =>
-                                                  StopWatchTimer.getDisplayTime(
-                                                      value,
-                                                      milliSecond: false),
-                                              controller:
-                                                  _model.timerController,
-                                              updateStateInterval:
-                                                  const Duration(milliseconds: 1000),
-                                              onChanged: (value, displayTime,
-                                                  shouldUpdate) {
-                                                _model.timerMilliseconds =
-                                                    value;
-                                                _model.timerValue = displayTime;
-                                                if (shouldUpdate) {
-                                                  setState(() {});
-                                                }
-                                              },
-                                              onEnded: () async {
-                                                _model.paused = true;
-                                                setState(() {});
-                                              },
-                                              textAlign: TextAlign.start,
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineSmall
-                                                  .override(
-                                                    fontFamily: 'Inter',
-                                                    color: FlutterFlowTheme.of(
+                                                const AlignmentDirectional(0.0, 1.0),
+                                            child: Padding(
+                                              padding: const EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 0.0, 0.0, 10.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'break time: ',
+                                                    style: FlutterFlowTheme.of(
                                                             context)
-                                                        .info,
-                                                    fontSize: 25.0,
-                                                    letterSpacing: 2.0,
-                                                    fontWeight: FontWeight.bold,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .info,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
                                                   ),
+                                                  FlutterFlowTimer(
+                                                    initialTime: _model
+                                                        .breakTimerInitialTimeMs,
+                                                    getDisplayTime: (value) =>
+                                                        StopWatchTimer
+                                                            .getDisplayTime(
+                                                                value,
+                                                                milliSecond:
+                                                                    false),
+                                                    controller: _model
+                                                        .breakTimerController,
+                                                    updateStateInterval:
+                                                        const Duration(
+                                                            milliseconds: 1000),
+                                                    onChanged: (value,
+                                                        displayTime,
+                                                        shouldUpdate) {
+                                                      _model.breakTimerMilliseconds =
+                                                          value;
+                                                      _model.breakTimerValue =
+                                                          displayTime;
+                                                      if (shouldUpdate) {
+                                                        setState(() {});
+                                                      }
+                                                    },
+                                                    textAlign: TextAlign.start,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .info,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -225,13 +337,16 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                 children: [
                                   Expanded(
                                     child: FFButtonWidget(
-                                      onPressed: ((_model.timerMilliseconds ==
+                                      onPressed: ((_model
+                                                      .workTimerMilliseconds ==
                                                   0) &&
                                               (_model.paused == true))
                                           ? null
                                           : () async {
-                                              _model.timerController
+                                              _model.workTimerController
                                                   .onStopTimer();
+                                              _model.breakTimerController
+                                                  .onStartTimer();
                                               _model.paused = true;
                                               setState(() {});
                                               await showModalBottomSheet(
@@ -249,21 +364,24 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                                           .viewInsetsOf(
                                                               context),
                                                       child: SizedBox(
-                                                        height: 250.0,
+                                                        height: 260.0,
                                                         child:
                                                             StopTimerSheetWidget(
                                                           activeSubTaskIndex: _model
                                                               .activeSubTaskIndex,
-                                                          timerLastValue: _model
-                                                              .timerMilliseconds,
-                                                          timerReset: () async {
+                                                          workTimerLastValue: _model
+                                                              .workTimerMilliseconds,
+                                                          breakTimerLastValue:
+                                                              _model
+                                                                  .breakTimerMilliseconds,
+                                                          workTimerReset:
+                                                              () async {},
+                                                          workTimerStop:
+                                                              () async {},
+                                                          breakTimerReset:
+                                                              () async {
                                                             _model
-                                                                .timerController
-                                                                .onResetTimer();
-                                                          },
-                                                          timerStop: () async {
-                                                            _model
-                                                                .timerController
+                                                                .breakTimerController
                                                                 .onResetTimer();
                                                           },
                                                         ),
@@ -315,17 +433,25 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                                   if (_model.paused == true) {
                                                     _model.paused = false;
                                                     setState(() {});
-                                                    _model.timerController
+                                                    _model.workTimerController
                                                         .onStartTimer();
+                                                    _model.breakTimerController
+                                                        .onStopTimer();
                                                   } else {
                                                     _model.paused = true;
                                                     setState(() {});
-                                                    _model.timerController
+                                                    _model.workTimerController
                                                         .onStopTimer();
+                                                    _model.breakTimerController
+                                                        .onStartTimer();
                                                   }
                                                 },
                                       text: valueOrDefault<String>(
-                                        _model.paused ? 'start' : 'pause',
+                                        _model.paused
+                                            ? (_model.workTimerMilliseconds > 0
+                                                ? 'continue'
+                                                : 'start')
+                                            : 'pause',
                                         'start',
                                       ),
                                       options: FFButtonOptions(
@@ -476,7 +602,8 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                         onPressed: ((FFAppState()
                                                         .activeTaskIndex ==
                                                     0) ||
-                                                (_model.timerMilliseconds > 0))
+                                                (_model.workTimerMilliseconds >
+                                                    0))
                                             ? null
                                             : () async {
                                                 if (FFAppState()
@@ -589,7 +716,8 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                                         .activeTaskIndex ==
                                                     (FFAppState().tasks.length -
                                                         1)) ||
-                                                (_model.timerMilliseconds > 0))
+                                                (_model.workTimerMilliseconds >
+                                                    0))
                                             ? null
                                             : () async {
                                                 if (FFAppState()
@@ -855,7 +983,8 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                         if (_model.activeSubTaskIndex == -1) {
                                           return FlutterFlowTheme.of(context)
                                               .success;
-                                        } else if ((_model.timerMilliseconds >
+                                        } else if ((_model
+                                                    .workTimerMilliseconds >
                                                 0) ||
                                             (FFAppState()
                                                     .tasks[FFAppState()
@@ -886,7 +1015,7 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                                 -1) {
                                               return 'completed';
                                             } else if ((_model
-                                                        .timerMilliseconds >
+                                                        .workTimerMilliseconds >
                                                     0) ||
                                                 (FFAppState()
                                                         .tasks[FFAppState()
@@ -911,7 +1040,7 @@ class _WorkspaceWidgetState extends State<WorkspaceWidget> {
                                                     -1) {
                                                   return const Color(0x7F00FF50);
                                                 } else if ((_model
-                                                            .timerMilliseconds >
+                                                            .workTimerMilliseconds >
                                                         0) ||
                                                     (FFAppState()
                                                             .tasks[FFAppState()

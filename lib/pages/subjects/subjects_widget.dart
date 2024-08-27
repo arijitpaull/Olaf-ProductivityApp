@@ -1,11 +1,9 @@
-import '/backend/schema/structs/index.dart';
 import '/components/add_task_sheet_widget.dart';
-import '/flutter_flow/flutter_flow_animations.dart';
+import '/components/delete_task_sheet_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'subjects_model.dart';
 export 'subjects_model.dart';
@@ -17,13 +15,10 @@ class SubjectsWidget extends StatefulWidget {
   State<SubjectsWidget> createState() => _SubjectsWidgetState();
 }
 
-class _SubjectsWidgetState extends State<SubjectsWidget>
-    with TickerProviderStateMixin {
+class _SubjectsWidgetState extends State<SubjectsWidget> {
   late SubjectsModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -34,29 +29,6 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().subtasks = [];
       setState(() {});
-    });
-
-    animationsMap.addAll({
-      'containerOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          VisibilityEffect(duration: 1.ms),
-          FadeEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 250.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 150.0.ms,
-            begin: const Offset(0.0, -100.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
     });
   }
 
@@ -100,7 +72,34 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            actions: const [],
+            actions: [
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    context.pushNamed(
+                      'Insights',
+                      extra: <String, dynamic>{
+                        kTransitionInfoKey: const TransitionInfo(
+                          hasTransition: true,
+                          transitionType: PageTransitionType.fade,
+                          duration: Duration(milliseconds: 100),
+                        ),
+                      },
+                    );
+                  },
+                  child: const Icon(
+                    Icons.insights_rounded,
+                    color: Color(0x7FF0F0F0),
+                    size: 25.0,
+                  ),
+                ),
+              ),
+            ],
             centerTitle: true,
             elevation: 0.0,
           ),
@@ -415,8 +414,8 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
                     elevation: 3.0,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10.0),
-                        bottomRight: Radius.circular(10.0),
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0),
                         topLeft: Radius.circular(0.0),
                         topRight: Radius.circular(0.0),
                       ),
@@ -435,8 +434,8 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
                           end: const AlignmentDirectional(0, 1.0),
                         ),
                         borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10.0),
-                          bottomRight: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.circular(15.0),
                           topLeft: Radius.circular(0.0),
                           topRight: Radius.circular(0.0),
                         ),
@@ -447,9 +446,9 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
                         children: [
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
-                                15.0, 0.0, 0.0, 0.0),
+                                14.0, 0.0, 0.0, 0.0),
                             child: Text(
-                              'action bar',
+                              'status',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -538,36 +537,33 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
                                               highlightColor:
                                                   Colors.transparent,
                                               onTap: () async {
-                                                FFAppState().removeFromTasks(
-                                                    TaskListStruct(
-                                                  taskName:
-                                                      actionTaskListItemsItem
-                                                          .taskName,
-                                                  taskDescription:
-                                                      actionTaskListItemsItem
-                                                          .taskDescription,
-                                                  subTaskList:
-                                                      actionTaskListItemsItem
-                                                          .subTaskList,
-                                                  status:
-                                                      actionTaskListItemsItem
-                                                                  .subTaskList
-                                                                  .last
-                                                                  .status ==
-                                                              true
-                                                          ? true
-                                                          : false,
-                                                ));
-                                                FFAppState().update(() {});
-                                                if (FFAppState()
-                                                        .activeTaskIndex ==
-                                                    FFAppState().tasks.length) {
-                                                  FFAppState().activeTaskIndex =
-                                                      FFAppState()
-                                                              .activeTaskIndex +
-                                                          -1;
-                                                  setState(() {});
-                                                }
+                                                await showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return GestureDetector(
+                                                      onTap: () =>
+                                                          FocusScope.of(context)
+                                                              .unfocus(),
+                                                      child: Padding(
+                                                        padding: MediaQuery
+                                                            .viewInsetsOf(
+                                                                context),
+                                                        child: SizedBox(
+                                                          height: 260.0,
+                                                          child:
+                                                              DeleteTaskSheetWidget(
+                                                            actionTaskListItemsList:
+                                                                actionTaskListItemsItem,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ).then((value) =>
+                                                    safeSetState(() {}));
                                               },
                                               child: Icon(
                                                 Icons.delete_rounded,
@@ -595,8 +591,7 @@ class _SubjectsWidgetState extends State<SubjectsWidget>
                         ],
                       ),
                     ),
-                  ).animateOnPageLoad(
-                      animationsMap['containerOnPageLoadAnimation']!),
+                  ),
               ],
             ),
           ),

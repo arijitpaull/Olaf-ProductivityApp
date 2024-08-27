@@ -1,38 +1,26 @@
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'stop_timer_sheet_model.dart';
-export 'stop_timer_sheet_model.dart';
+import 'delete_task_sheet_model.dart';
+export 'delete_task_sheet_model.dart';
 
-class StopTimerSheetWidget extends StatefulWidget {
-  const StopTimerSheetWidget({
+class DeleteTaskSheetWidget extends StatefulWidget {
+  const DeleteTaskSheetWidget({
     super.key,
-    required this.activeSubTaskIndex,
-    required this.workTimerLastValue,
-    required this.workTimerReset,
-    required this.workTimerStop,
-    required this.breakTimerLastValue,
-    required this.breakTimerReset,
+    required this.actionTaskListItemsList,
   });
 
-  final int? activeSubTaskIndex;
-  final int? workTimerLastValue;
-  final Future Function()? workTimerReset;
-  final Future Function()? workTimerStop;
-  final int? breakTimerLastValue;
-  final Future Function()? breakTimerReset;
+  final TaskListStruct? actionTaskListItemsList;
 
   @override
-  State<StopTimerSheetWidget> createState() => _StopTimerSheetWidgetState();
+  State<DeleteTaskSheetWidget> createState() => _DeleteTaskSheetWidgetState();
 }
 
-class _StopTimerSheetWidgetState extends State<StopTimerSheetWidget> {
-  late StopTimerSheetModel _model;
+class _DeleteTaskSheetWidgetState extends State<DeleteTaskSheetWidget> {
+  late DeleteTaskSheetModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -43,7 +31,7 @@ class _StopTimerSheetWidgetState extends State<StopTimerSheetWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => StopTimerSheetModel());
+    _model = createModel(context, () => DeleteTaskSheetModel());
   }
 
   @override
@@ -102,7 +90,7 @@ class _StopTimerSheetWidgetState extends State<StopTimerSheetWidget> {
                       Align(
                         alignment: const AlignmentDirectional(-1.0, 0.0),
                         child: Text(
-                          'is the task completed?',
+                          'do you want to delete this subject?',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Inter',
@@ -116,10 +104,7 @@ class _StopTimerSheetWidgetState extends State<StopTimerSheetWidget> {
                       Align(
                         alignment: const AlignmentDirectional(-1.0, 0.0),
                         child: Text(
-                          valueOrDefault<String>(
-                            'task time: ${functions.timeConvert(widget.workTimerLastValue!)}',
-                            'task time: 00 hours, 00 minutes, 00 seconds',
-                          ),
+                          'this action can\'t be undone',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Inter',
@@ -145,23 +130,9 @@ class _StopTimerSheetWidgetState extends State<StopTimerSheetWidget> {
                           10.0, 10.0, 10.0, 10.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          await widget.workTimerStop?.call();
-                          await widget.workTimerReset?.call();
-                          await widget.breakTimerReset?.call();
                           Navigator.pop(context);
-
-                          context.pushNamed(
-                            'workspace',
-                            extra: <String, dynamic>{
-                              kTransitionInfoKey: const TransitionInfo(
-                                hasTransition: true,
-                                transitionType: PageTransitionType.fade,
-                                duration: Duration(milliseconds: 10),
-                              ),
-                            },
-                          );
                         },
-                        text: 'reset',
+                        text: 'no',
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -190,52 +161,28 @@ class _StopTimerSheetWidgetState extends State<StopTimerSheetWidget> {
                           10.0, 10.0, 10.0, 10.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          HapticFeedback.mediumImpact();
-                          FFAppState().updateSubtasksAtIndex(
-                            widget.activeSubTaskIndex!,
-                            (e) => e
-                              ..timeOfCompletion = widget.workTimerLastValue
-                              ..status = true
-                              ..timeOfBreak = widget.breakTimerLastValue,
-                          );
-                          setState(() {});
-                          FFAppState().updateTasksAtIndex(
-                            FFAppState().activeTaskIndex,
-                            (e) =>
-                                e..subTaskList = FFAppState().subtasks.toList(),
-                          );
-                          setState(() {});
-                          await widget.workTimerReset?.call();
-                          await widget.breakTimerReset?.call();
+                          FFAppState().removeFromTasks(TaskListStruct(
+                            taskName: widget.actionTaskListItemsList?.taskName,
+                            taskDescription: widget
+                                .actionTaskListItemsList?.taskDescription,
+                            subTaskList:
+                                widget.actionTaskListItemsList?.subTaskList,
+                            status: widget.actionTaskListItemsList?.subTaskList
+                                        .last.status ==
+                                    true
+                                ? true
+                                : false,
+                          ));
+                          FFAppState().update(() {});
+                          if (FFAppState().activeTaskIndex ==
+                              FFAppState().tasks.length) {
+                            FFAppState().activeTaskIndex =
+                                FFAppState().activeTaskIndex + -1;
+                            setState(() {});
+                          }
                           Navigator.pop(context);
-                          ScaffoldMessenger.of(context).clearSnackBars();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Task completed!',
-                                style: GoogleFonts.getFont(
-                                  'Inter',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                ),
-                              ),
-                              duration: const Duration(milliseconds: 2500),
-                              backgroundColor: const Color(0x7F00FF50),
-                            ),
-                          );
-
-                          context.pushNamed(
-                            'workspace',
-                            extra: <String, dynamic>{
-                              kTransitionInfoKey: const TransitionInfo(
-                                hasTransition: true,
-                                transitionType: PageTransitionType.fade,
-                                duration: Duration(milliseconds: 10),
-                              ),
-                            },
-                          );
                         },
-                        text: 'done',
+                        text: 'yes',
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(

@@ -35,10 +35,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       errorBuilder: (context, state) => appStateNotifier.showSplashImage
           ? Builder(
               builder: (context) => Container(
-                color: const Color(0xFF101010),
+                color: Colors.transparent,
                 child: Image.asset(
-                  'assets/images/Olaf.png',
-                  fit: BoxFit.contain,
+                  'assets/images/olafintro.gif',
+                  fit: BoxFit.cover,
                 ),
               ),
             )
@@ -50,10 +50,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, _) => appStateNotifier.showSplashImage
               ? Builder(
                   builder: (context) => Container(
-                    color: const Color(0xFF101010),
+                    color: Colors.transparent,
                     child: Image.asset(
-                      'assets/images/Olaf.png',
-                      fit: BoxFit.contain,
+                      'assets/images/olafintro.gif',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 )
@@ -74,9 +74,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : const SubjectsWidget(),
         ),
         FFRoute(
-          name: 'rough',
-          path: '/rough',
-          builder: (context, params) => const RoughWidget(),
+          name: 'Insights',
+          path: '/insights',
+          builder: (context, params) => const InsightsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

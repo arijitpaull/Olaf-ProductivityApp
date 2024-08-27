@@ -15,11 +15,18 @@ class WorkspaceModel extends FlutterFlowModel<WorkspaceWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for Timer widget.
-  final timerInitialTimeMs = 0;
-  int timerMilliseconds = 0;
-  String timerValue = StopWatchTimer.getDisplayTime(0, milliSecond: false);
-  FlutterFlowTimerController timerController =
+  // State field(s) for WorkTimer widget.
+  final workTimerInitialTimeMs = 0;
+  int workTimerMilliseconds = 0;
+  String workTimerValue = StopWatchTimer.getDisplayTime(0, milliSecond: false);
+  FlutterFlowTimerController workTimerController =
+      FlutterFlowTimerController(StopWatchTimer(mode: StopWatchMode.countUp));
+
+  // State field(s) for BreakTimer widget.
+  final breakTimerInitialTimeMs = 0;
+  int breakTimerMilliseconds = 0;
+  String breakTimerValue = StopWatchTimer.getDisplayTime(0, milliSecond: false);
+  FlutterFlowTimerController breakTimerController =
       FlutterFlowTimerController(StopWatchTimer(mode: StopWatchMode.countUp));
 
   @override
@@ -27,6 +34,7 @@ class WorkspaceModel extends FlutterFlowModel<WorkspaceWidget> {
 
   @override
   void dispose() {
-    timerController.dispose();
+    workTimerController.dispose();
+    breakTimerController.dispose();
   }
 }
